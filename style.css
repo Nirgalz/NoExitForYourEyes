@@ -1,0 +1,16 @@
+body {
+    background-color: black;
+}
+H4,p {
+    color: #cddaff;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+#textInput {
+    background-color: black;
+    color: #cddaff;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 100%;
+}
+body {
+    height: 100%;
+}
