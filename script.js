@@ -3,16 +3,20 @@
 $(document).ready(() => {
 
 
-    var user = "";
+    var userData = {
+        name: "",
+        status: ""
+    };
+
 
         const data = {
             welcome: {
-                content: "Hello human. For the sake of subject identification, can you please decline your identity ?",
+                content: " Hello human. For the sake of subject identification, can you please decline your identity ?",
                 nextAction: () => textInputHideShow(true)
             },
             greeting: {
-                content: "hi "+ user +", I\'m your personal assistant for your time being, which may end up pretty soon. You've been removed from any control of your body. Don't despair yet, I can help you with that.",
-                nextAction: console.log("gg")
+                content: " hi "+ userData.name +", I\'m your personal assistant for your time being, which may end up pretty soon. You've been removed from any control of your body. Don't despair yet, I can help you with that.",
+                nextAction: () => {console.log(userData.name)}
 
             }
         };
@@ -23,10 +27,17 @@ $(document).ready(() => {
         //output text and next action on end
         function textOutput(ctx, count) {
 
-            const output = $("#textOutput");
+            const div = $("#textOutput");
+            let out = $("#out");
+            if (count === 0) {
+                out.first().removeAttr("id");
+                div.append("<p id='out'></p>");
+            }
+
             if (ctx.content[count] !== undefined) {
+
                 setTimeout(() => {
-                    output.text(output.text() + ctx.content[count]);
+                    out.text(out.text() + ctx.content[count]);
                     textOutput(ctx, count + 1)
                 }, 30);
             }
@@ -52,7 +63,7 @@ $(document).ready(() => {
 
             let input = $("#textInput");
 
-            user = input.val();
+            userData.name = input.val();
             textInputHideShow(false);
             textOutput(data.greeting, 0);
 
