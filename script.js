@@ -3,7 +3,7 @@
 $(document).ready(() => {
 
     var options = {
-        devMode: true
+        devMode: false
     }
 
     var userData = {
@@ -19,7 +19,7 @@ $(document).ready(() => {
         },
         {
             label: "greeting",
-            string: " hi {name}, I\'m your personal assistant for your time being, which may end up pretty soon. You've been removed from any control of your body. Don't despair yet, I can help you with that. {status}",
+            string: " hi {name}, I\'m your personal assistant for your time being, which may end up pretty soon. You've been removed from any control of your body. Don't despair yet, I can help you with that.",
             nextAction: () => {
                 console.log(userData.name)
             }
@@ -33,7 +33,7 @@ $(document).ready(() => {
 
     //output text and next action on end
     function textOutput(ctx, count) {
-        replaceVarsInText(ctx.string);
+        let string = replaceVarsInText(ctx.string);
         const div = $("#textOutput");
         let out = $("#out");
         if (count === 0) {
@@ -42,13 +42,13 @@ $(document).ready(() => {
         }
 
         if (options.devMode) {
-            out.text(ctx.string);
+            out.text(string);
             ctx.nextAction();
         } else {
-            if (ctx.string[count] !== undefined) {
+            if (string[count] !== undefined) {
 
                 setTimeout(() => {
-                    out.text(out.text() + ctx.string[count]);
+                    out.text(out.text() + string[count]);
                     textOutput(ctx, count + 1)
                 }, 30);
 
@@ -58,7 +58,7 @@ $(document).ready(() => {
         }
     }
 
-
+    //replace vars in string by userData vars
     function replaceVarsInText(string) {
         let s = string.split("{");
         let vars = [];
@@ -68,13 +68,9 @@ $(document).ready(() => {
             }
         }
         for (let j = 0 ; j < vars.length ; j++) {
-            let v = "{" + vars[j] + "}";
-            let c = userData[vars[j]];
-            string.replace(v, c);
-            console.log(string, v, c);
+            string = string.replace("{" + vars[j] + "}", userData[vars[j]]);
         }
-
-        console.log(string);
+        return string;
     }
 
 
@@ -90,15 +86,11 @@ $(document).ready(() => {
 
     //input
     $("#textInput").keypress((e) => {
-
         if (e.which === 13) {
-
             let input = $("#textInput");
-
             userData.name = input.val();
             textInputHideShow(false);
             textOutput(data[1], 0);
-
         }
     });
 });
